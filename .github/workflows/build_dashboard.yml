@@ -3,8 +3,13 @@ name: Build Dashboard
 on:
   push:
     paths:
-      - 'Нф_2.xlsx'   # trigger only when Excel is updated
-  workflow_dispatch:    # also allow manual trigger from GitHub UI
+      - 'Нф_2.xlsx'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -24,9 +29,18 @@ jobs:
       - name: Generate dashboard
         run: python generate_dashboard.py
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload to Pages
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          include_files: dashboard.html
+          path: .
+          
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
