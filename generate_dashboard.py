@@ -641,6 +641,6 @@ HTML = f'''<!DOCTYPE html>
 </body>
 </html>'''
 
-out=os.path.join(os.path.dirname(os.path.abspath(__file__)),'dashboard.html')
+out=os.path.join(os.path.dirname(os.path.abspath(__file__)),'index.html')
 with open(out,'w',encoding='utf-8') as f: f.write(HTML)
 print(f"✓ Saved: {out}  ({len(HTML)//1024}KB)  Months: {months_with_data}")
